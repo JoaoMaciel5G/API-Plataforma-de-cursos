@@ -1,13 +1,13 @@
 import {Router} from "express"
-import {createUser, search} from "../controllers/controllerRoutes.ts"
+import { Database } from "../db/db-controllers.ts"
 
 const router = Router()
+const db = new Database()
 
 router.post("/register", (request, response)=>{
-    createUser(request, response)
+    db.createUser(request, response)
 })
 router.get("/register/account", (request, response)=>{
-    search(request, response)
 })
 
 export default router
