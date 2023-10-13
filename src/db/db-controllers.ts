@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import jsonwebtoken from "jsonwebtoken"
 
 const prisma = new PrismaClient()
 
@@ -10,21 +11,27 @@ interface User{
 
 export class Database{
     async create({name, email, passwordHash}: User){
-        await prisma.profile.create({
-            data: {
-                name,
-                email,
-                password: passwordHash
-            }
-        })
+        try{
+            const user = await prisma.profile.create({
+                data: {
+                    name,
+                    email,
+                    password: passwordHash
+                }
+            })
+
+
+        }catch(error){
+
+        }
+        
     }
 
-    delete(id: string){
+    async delete(){
 
     }
 
-    searchUser(){
-
+    async searchUser(){
     }
 
     update(id: string){

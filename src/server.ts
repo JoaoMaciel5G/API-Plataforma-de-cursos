@@ -1,29 +1,10 @@
-import { fastify } from "fastify"
-import { genSalt, hash } from "bcrypt"
-import { Database } from "./db/db-controllers.ts"
+import express from "express"
+import cors from "cors"
+import router from "./routes/routes.ts"
 
-interface User{
-    name: string,
-    email: string,
-    password: string
-}
+const app = express()
+app.use(cors())
+app.use(express.json())
+app.use("/", router)
 
-const server = fastify()
-const db = new Database()
-
-server.post<{Body: User}>("/register", async (request, reply)=>{
-    const {name, email, password} = request.body
-
-    try{
-        const salt = await genSalt(12)
-        const passwordHash = await hash(password, salt)
-        const user = await db.create({ name, email, passwordHash })
-
-        return reply.status(200).send({message: "Usuário Criado"})
-    }catch(error){
-        console.log(error)
-        return reply.status(403).send({message: "Houve um erro"})
-    }
-})
-
-server.listen({port: 3000})
+app.listen(process.env.PORT || 3000)
