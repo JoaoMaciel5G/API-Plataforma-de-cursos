@@ -2,16 +2,16 @@ import { PrismaClient, Prisma } from "@prisma/client"
 import {Request, Response} from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { genSalt, hash, compare } from "bcrypt"
+import { secretKey, passwdNodeMailer, emailNodeMailer, port, hostNodeMailer } from "../environment_variables.ts"
+import nodemailer from "nodemailer"
 
 const prisma = new PrismaClient()
-const secret = process.env.SECRET as string
 
 interface User{
     name: string
     email: string,
     password: string
 }
-
 interface Search{
     email: string,
     password: string
@@ -33,8 +33,8 @@ export class Database{
                 }
             })
 
-            const token = jwt.sign({userId: user.id}, secret)
-            return token
+            const token = jwt.sign({userId: user.id}, secretKey)
+            return response.status(201).json({message: token})
         }catch(error){
             if(error instanceof Prisma.PrismaClientKnownRequestError){
                 return response.status(403).json({message: "Por favor, use outro e-mail"})
@@ -45,35 +45,36 @@ export class Database{
     }
 
     async delete(request: Request, response: Response){
-        const token = request.headers.authorization as string
+        const authToken = request.headers.authorization as string
+        const token = authToken && authToken.split(" ")[1]
 
         try{
-            const decodedToken = jwt.verify(token, secret) as JwtPayload
-            const user = decodedToken.userId
+            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
+            const userId = decodedToken.userId
 
             const getInfoUser = await prisma.profile.findUnique({
                 where: {
-                    id: user
+                    id: userId
                 }
             }) as object
 
             //verifica se o id do usuario do token confere com o do banco
             if(Object.keys(getInfoUser).length > 0){
-                const exclude = await prisma.profile.delete({
+                const excludeUser = await prisma.profile.delete({
                     where: {
-                        id: user
+                        id: userId
                     }
                 })
                 return response.status(200).json({message: "Usuario excluido como sucesso"})
             }
             return response.status(401).json({message: "Ação não autorizada"})
         }catch(error){
-            response.status(403).json({message: "Ação não autorizada"})
+            response.status(403).json({message: "Houve algum erro, tente novamente mais tarde"})
         }
     }
 
-    async readUser(request: Request, response: Response){
-        const {email, password}: Search = request.body
+    async loginUser(request: Request, response: Response){
+        const { email, password }: Search = request.body
 
         try{
             const getInfoUser = await prisma.profile.findUnique({
@@ -95,11 +96,54 @@ export class Database{
         }
     }
 
-    update(id: string){
+    async sendEmail(request: Request, response: Response){
+        const hostNodeMailer = process.env.HOST_NODEMAILER as string
+        const authToken = request.headers.authorization as string
+        const token = authToken && authToken.split(" ")[1]
+        const configTransport = {
+            host: hostNodeMailer,
+            port: port,
+            secure: false,
+            auth: {
+                user: emailNodeMailer,
+                pass: passwdNodeMailer
+        }}
+
+        const transport = nodemailer.createTransport(configTransport as object)
+
+        try{
+            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
+            const userId = decodedToken.userId
+
+            //pega o email do banco de dados e envia para o email que pediu a redefinição de senha
+            const getInfoUser = await prisma.profile.findUnique({
+                where: {
+                    id: userId
+                },
+                select: {
+                    email: true
+                }
+            }) as User
+
+            if(Object.keys(getInfoUser).length > 0){
+                const emailUser =  getInfoUser.email
+                const send = await transport.sendMail({
+                    from: `Pro Tech Cursos <${emailNodeMailer}>`,
+                    to: emailUser,
+                    subject: "Redefinição de senha",
+                    html: `<h2>Você solicitou uma redefinição de senha?</h2><p>Para redefinir sua senha, entre no link a seguir <a href="google.com">Redefinir senha</a></p><p>Se você não solicitou esta ação, ignore este email.</p>`
+                })
+
+                return response.status(200).json({message: "Concluido"}) 
+            }
+            return response.status(403).json({message: "Ação não autorizada"})
+        }catch(error){
+            console.log(error)
+            return response.status(403).json({message: "Houve algum erro, tente novamente mais tarde"})
+        }
+    }
+
+    async updatePassword(request: Request, response: Response){
 
     }
 }
-
-const uss = new Database()
-//uss.create({name: "joao", email: "joaomaciel.dev@gmail.com", password: "123456"})
-//uss.readUser({email: "joaomaciel.dev@gmail.com", password: "1234567"})
