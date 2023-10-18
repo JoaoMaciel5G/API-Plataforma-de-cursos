@@ -16,3 +16,12 @@ model Profile{
 
   @@map("profile")
 }
+
+model Courses{
+  id String @id @default(uuid())
+  images String
+  name String
+  description String
+
+  @@map("courses")
+}

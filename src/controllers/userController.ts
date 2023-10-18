@@ -1,36 +1,17 @@
-import { PrismaClient, Prisma } from "@prisma/client"
+import {Request, Response} from "express"
+import jwt, { JwtPayload } from "jsonwebtoken"
+import { genSalt, hash, compare } from "bcrypt"
+import { UserData } from "../interfaces/interfaces"
 
-
-import { secretKey, passwdNodeMailer, emailNodeMailer, port, hostNodeMailer } from "../environment_variables.ts"
-import nodemailer from "nodemailer"
-
-const prisma = new PrismaClient()
-
-interface User{
-    name: string
-    email: string,
-    password: string
-}
-interface Search{
-    email: string,
-    password: string
-}
-
-export class Database{
+export class UserController{
     async createUser(request: Request, response: Response){
-        const { name, email, password }: User = request.body
+        const { name, email, password }: UserData = request.body
 
         try{
             const salt = await genSalt(12)
             const passwordHash = await hash(password, salt)
 
-            const user = await prisma.profile.create({
-                data: {
-                    name,
-                    email,
-                    password: passwordHash
-                }
-            })
+            
 
             const token = jwt.sign({userId: user.id}, secretKey)
             return response.status(201).json({message: token})
@@ -40,6 +21,35 @@ export class Database{
             }
             console.log(error)
             return response.status(403).json({message: "Houve algum erro, tente novamente mais tarde"})
+        }
+    }
+
+    async delete(request: Request, response: Response){
+        const authToken = request.headers.authorization as string
+        const token = authToken && authToken.split(" ")[1]
+
+        try{
+            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
+            const userId = decodedToken.userId
+
+            const getInfoUser = await prisma.profile.findUnique({
+                where: {
+                    id: userId
+                }
+            }) as object
+
+            //verifica se o id do usuario do token confere com o do banco
+            if(Object.keys(getInfoUser).length > 0){
+                const excludeUser = await prisma.profile.delete({
+                    where: {
+                        id: userId
+                    }
+                })
+                return response.status(200).json({message: "Usuario excluido como sucesso"})
+            }
+            return response.status(401).json({message: "Ação não autorizada"})
+        }catch(error){
+            response.status(403).json({message: "Houve algum erro, tente novamente mais tarde"})
         }
     }
 
