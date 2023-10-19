@@ -1,13 +1,13 @@
 import {Request, Response} from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { Login, UserData } from "../interfaces/interfacesAndTypes"
-import { createUserUseCase } from "../useCases/createUserUseCase"
-import { secretKey } from "../environment_variables"
-import { DeleteUserUseCase } from "../useCases/deleteUserUseCase"
-import { LoginUserUseCase } from "../useCases/loginUserUseCase"
-import { SendEmailForgotPasswordUseCase } from "../useCases/sendEmailForgotPasswordUseCase"
-import { UpdatePasswordUseCase } from "../useCases/updatePasswordUseCase"
-import { GetCoursesUseCase } from "../useCases/getCoursesUseCase"
+import { Login, UserData } from "../interfaces/interfacesAndTypes.ts"
+import { createUserUseCase } from "../useCases/createUserUseCase.ts"
+import { secretKey } from "../environment_variables.ts"
+import { DeleteUserUseCase } from "../useCases/deleteUserUseCase.ts"
+import { LoginUserUseCase } from "../useCases/loginUserUseCase.ts"
+import { SendEmailForgotPasswordUseCase } from "../useCases/sendEmailForgotPasswordUseCase.ts"
+import { UpdatePasswordUseCase } from "../useCases/updatePasswordUseCase.ts"
+import { GetCoursesUseCase } from "../useCases/getCoursesUseCase.ts"
 
 export class UserController{
     async create(request: Request, response: Response){

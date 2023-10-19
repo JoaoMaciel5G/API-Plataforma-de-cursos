@@ -1,6 +1,6 @@
 import { genSalt, hash } from "bcrypt";
-import { UpdatePassword } from "../infra/updatePassword";
-import prisma from "../../prisma/prismaClient";
+import { UpdatePassword } from "../infra/updatePassword.ts";
+import prisma from "../../prisma/prismaClient.ts";
 
 const findUser = new UpdatePassword(prisma)
 

@@ -11,7 +11,7 @@ export class SendEmailForgotPasswordUseCase{
             const configTransport= {
                 host: hostNodeMailer,
                 port: port,
-                secure: true,
+                secure: false,
                 auth: {
                     user: emailNodeMailer,
                     pass: passwdNodeMailer
@@ -26,6 +26,7 @@ export class SendEmailForgotPasswordUseCase{
                 subject: "Redefinição de senha",
                 html: `<h2>Você solicitou uma redefinição de senha?</h2><p>Para redefinir sua senha, entre no link a seguir <a href="google.com">Redefinir senha</a></p><p>Se você não solicitou esta ação, ignore este email.</p>`
             })
+            return {sucess: "Email enviado"}
         }catch(error){
             console.log(error);
             return {errorSystem: "Houve algum erro, tente novamente mais tarde"}

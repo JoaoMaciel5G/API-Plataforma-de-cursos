@@ -1,6 +1,6 @@
-import { UserData } from "../interfaces/interfacesAndTypes";
-import { CreateUser } from "../infra/createUser";
-import prisma from "../../prisma/prismaClient";
+import { UserData } from "../interfaces/interfacesAndTypes.ts";
+import { CreateUser } from "../infra/createUser.ts";
+import prisma from "../../prisma/prismaClient.ts";
 import { Prisma } from "@prisma/client";
 import { genSalt, hash } from "bcrypt";
 

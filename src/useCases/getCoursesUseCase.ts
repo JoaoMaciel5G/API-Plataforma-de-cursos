@@ -1,5 +1,5 @@
-import prisma from "../../prisma/prismaClient"
-import { FindCourses } from "../infra/courses/findCourses"
+import prisma from "../../prisma/prismaClient.ts"
+import { FindCourses } from "../infra/courses/findCourses.ts"
 
 const findCourses = new FindCourses(prisma)
 

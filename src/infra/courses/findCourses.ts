@@ -16,11 +16,10 @@ export class FindCourses{
                     description: true
                 }
             })
-            courses.map((item)=>{
-                const { images, name, description } = item
-                return {images, name, description}
-            })
-            return {error: "Deu erro ao buscar os cursos"}
+            if(courses.length < 0){
+                return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+            }
+            return courses
         }catch(error){
             throw new Error("Cursos não encontrado")
         }

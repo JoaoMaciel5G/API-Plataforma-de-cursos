@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { UserData } from '../interfaces/interfacesAndTypes';
+import { UserData } from '../interfaces/interfacesAndTypes.ts';
 
 export class CreateUser{
   private prisma: PrismaClient;

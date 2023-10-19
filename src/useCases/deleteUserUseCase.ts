@@ -1,7 +1,7 @@
-import prisma from "../../prisma/prismaClient"
-import { DeleteUser } from "../infra/deleteUser"
-import { FindUserById } from "../infra/findUserById"
-import { UserId } from "../interfaces/interfacesAndTypes"
+import prisma from "../../prisma/prismaClient.ts"
+import { DeleteUser } from "../infra/deleteUser.ts"
+import { FindUserById } from "../infra/findUserById.ts"
+import { UserId } from "../interfaces/interfacesAndTypes.ts"
 
 const deleteUser = new DeleteUser(prisma)
 const findUser = new FindUserById(prisma)

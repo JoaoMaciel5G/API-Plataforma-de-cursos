@@ -1,7 +1,7 @@
 import { compare } from "bcrypt";
-import { Login } from "../interfaces/interfacesAndTypes";
-import { FindUserByEmail} from "../infra/findUserByEmail";
-import prisma from "../../prisma/prismaClient";
+import { Login } from "../interfaces/interfacesAndTypes.ts";
+import { FindUserByEmail} from "../infra/findUserByEmail.ts";
+import prisma from "../../prisma/prismaClient.ts";
 
 const findUser = new FindUserByEmail(prisma)
 
