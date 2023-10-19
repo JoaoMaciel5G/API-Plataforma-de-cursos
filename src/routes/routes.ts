@@ -1,24 +1,31 @@
-import {Router, response} from "express"
-import { Database } from "../db/db-controllers.ts"
-import { DatabaseCourses } from "../db/db-courses.ts"
+import {Router} from "express"
+import { UserController } from "../controllers/userController"
 
 const router = Router()
-const db = new Database()
-const courses = new DatabaseCourses()
+const userController = new UserController()
 
-router.post("/register", (request, response)=>{
-    db.createUser(request, response)
-})
-router.post("/register/forgot-password", (request, response)=>{
-    db.sendEmail(request, response) 
+router.post("/create", async (request, response)=>{
+    return userController.create(request, response)
 })
 
-router.get("/", async (request, response)=>{
-    const uss = await courses.getCourses()
-    uss?.map((item)=>{
-        console.log(item.images)
-    })
-    return
+router.delete("/delete", (request, response)=>{
+    return userController.delete(request, response)
+})
+
+router.get("/getCourses", async (request, response)=>{
+    return userController.getCourses(request, response)
+})
+
+router.post("/login", async (request, response)=>{
+    return userController.loginUser(request, response)
+})
+
+router.post("/sendMail", async (request, response) => {
+    return userController.sendEmail(request, response)
+})
+
+router.patch("/updatePassword", async (request, response)=>{
+    return userController.updatePassword(request, response)
 })
 
 export default router

@@ -6,7 +6,7 @@ export class FindUserById{
     constructor(prisma: PrismaClient){
         this.prisma = prisma
     }
-    async execute (userId: string) {
+    async execute (userId: string){
         try{
             const search = await this.prisma.profile.findUnique({ where: { id: userId } })
             return search

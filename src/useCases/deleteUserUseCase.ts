@@ -1,27 +1,24 @@
 import prisma from "../../prisma/prismaClient"
-import { secretKey } from "../environment_variables"
-import { DeleteUser } from "../services/deleteUser"
-import jwt, { JwtPayload } from "jsonwebtoken"
-import { FindUserById } from "../services/findUserById"
+import { DeleteUser } from "../infra/deleteUser"
+import { FindUserById } from "../infra/findUserById"
+import { UserId } from "../interfaces/interfacesAndTypes"
 
 const deleteUser = new DeleteUser(prisma)
 const findUser = new FindUserById(prisma)
 
 export class DeleteUserUseCase{
-    async execute(token: string){
+    async execute(id: UserId){
         try{
-            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
-            const userId = decodedToken.userId
+            const getInfoUser = await findUser.execute(id)
 
-            const getInfoUser = findUser.execute(userId)
-
-            if(Object.keys(getInfoUser).length > 0){
-                const excludeUser = await deleteUser.execute(userId)
+            if(getInfoUser !== null && Object.keys(getInfoUser).length > 0){
+                const excludeUser = await deleteUser.execute(id)
                 return
             }
-            return {message: "Ação não autorizada"}
+            return {errorActionForbidden: "Ação não autorizada"}
         }catch(error){
-            throw new Error("Houve algum erro, tente novamente mais tarde")
+            console.log(error)
+            return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
         }
     }
 }

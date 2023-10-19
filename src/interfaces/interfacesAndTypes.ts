@@ -3,15 +3,9 @@ export interface UserData{
     email: string,
     password: string
 }
-export interface Login{
+export type Login = {
     email: string,
     password: string
 }
 
-export interface UserResponse {
-    message: string;
-}
-
-export interface UserId{
-    userId: string
-}
+export type UserId = string
