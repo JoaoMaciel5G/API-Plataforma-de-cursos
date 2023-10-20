@@ -9,7 +9,7 @@
   "scripts": {
     "start:dev": "nodemon src/server.ts",
     "build": "tsup src",
-    "star:prod": "node dist/server.js"
+    "star:prod": "node dist/server.cjs"
   },
   "keywords": [],
   "author": "",
