@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
-    "start:dev": "nodemon src/server.ts"
+    "start:dev": "nodemon src/server.ts",
+    "build": "tsup src",
+    "star:prod": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +20,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.6"
+    "nodemailer": "^6.9.6",
+    "tsup": "^7.2.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
