@@ -8,20 +8,13 @@ export class FindCourses{
     }
 
     async execute(){
-        try{
-            const courses = await this.prisma.courses.findMany({
-                select:{
-                    images: true,
-                    name: true,
-                    description: true
-                }
-            })
-            if(courses.length < 0){
-                return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+        const courses = await this.prisma.courses.findMany({
+            select:{
+                images: true,
+                name: true,
+                description: true
             }
-            return courses
-        }catch(error){
-            throw new Error("Cursos não encontrado")
-        }
+        })
+        return courses
     }
 }

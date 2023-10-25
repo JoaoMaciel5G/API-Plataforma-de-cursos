@@ -12,8 +12,7 @@ export class UpdatePasswordUseCase{
 
             const changePass = await findUser.execute(userId, passwordHash)
         }catch(error){
-            console.log(error)
-            return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+            throw Error(error.message)
         }
     }
 }

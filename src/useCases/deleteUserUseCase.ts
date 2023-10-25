@@ -11,14 +11,13 @@ export class DeleteUserUseCase{
         try{
             const getInfoUser = await findUser.execute(id)
 
-            if(getInfoUser !== null && Object.keys(getInfoUser).length > 0){
-                const excludeUser = await deleteUser.execute(id)
-                return
+            if(!getInfoUser?.id){
+                throw Error("Usuário não encontrado", {cause: "notFound"})
             }
-            return {errorActionForbidden: "Ação não autorizada"}
+            const excludeUser = await deleteUser.execute(id)
+            return
         }catch(error){
-            console.log(error)
-            return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+            throw Error(error)
         }
     }
 }

@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { genSalt, hash } from "bcrypt";
 
 const createUser = new CreateUser(prisma)
+const { PrismaClientKnownRequestError } = Prisma
 
 export class createUserUseCase{
     async execute({email, password, name}: UserData){
@@ -19,11 +20,10 @@ export class createUserUseCase{
             })
             return user
         }catch(error){
-            if(error instanceof Prisma.PrismaClientKnownRequestError){
-                return {errorEmailUsed: "Use outro e-mail"}
+            if(error instanceof PrismaClientKnownRequestError){
+                throw Error("Use outro e-mail", {cause: "email"}); 
             }
-            console.log(error)
-            return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+            throw Error(error.message); 
         }
     } 
 }

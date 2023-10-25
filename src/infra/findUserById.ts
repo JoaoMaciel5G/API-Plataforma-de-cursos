@@ -7,11 +7,7 @@ export class FindUserById{
         this.prisma = prisma
     }
     async execute (userId: string){
-        try{
-            const search = await this.prisma.profile.findUnique({ where: { id: userId } })
-            return search
-        }catch(error){
-            throw new Error("Usuário não encontrado")
-        }
+        const search = await this.prisma.profile.findUniqueOrThrow({ where: { id: userId } })
+        return search
     } 
 }

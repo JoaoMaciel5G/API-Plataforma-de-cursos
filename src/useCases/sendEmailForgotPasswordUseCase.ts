@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer"
 import { passwdNodeMailer, emailNodeMailer, port, hostNodeMailer } from "../environment_variables.ts"
-import { FindUserById } from "../infra/findUserById.ts"
 import prisma from "../../prisma/prismaClient.ts"
+import { FindUserByEmail } from "../infra/findUserByEmail.ts"
 
-const findUser = new FindUserById(prisma)
+const findUser = new FindUserByEmail(prisma)
 
 export class SendEmailForgotPasswordUseCase{
-    async execute(id: string) {
+    async execute(email: string) {
         try{
             const configTransport= {
                 host: hostNodeMailer,
@@ -18,7 +18,7 @@ export class SendEmailForgotPasswordUseCase{
             }}
 
             const transport = nodemailer.createTransport(configTransport as object)
-            const find = await findUser.execute(id)
+            const find = await findUser.execute(email)
 
             const send = await transport.sendMail({
                 from: `Pro Tech Cursos <${emailNodeMailer}>`,
@@ -29,7 +29,7 @@ export class SendEmailForgotPasswordUseCase{
             return {sucess: "Email enviado"}
         }catch(error){
             console.log(error);
-            return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+            throw Error("Houve um erro ao enviar o email")
         }
         
     }

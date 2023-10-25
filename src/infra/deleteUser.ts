@@ -8,10 +8,6 @@ export class DeleteUser{
     }
 
     async execute(userId: string){
-        try{
-            const deleteUser = await this.prisma.profile.delete({ where: { id: userId } })
-        }catch(error){
-            throw new Error("Não foi possivel deletar o usuário")
-        }
+        const deleteUser = await this.prisma.profile.delete({ where: { id: userId } })
     }
 }

@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { UserData } from '../interfaces/interfacesAndTypes.ts';
 
 export class CreateUser{
@@ -9,11 +9,7 @@ export class CreateUser{
   }
 
   async execute(data: UserData){
-    try{
-        const createUser = await this.prisma.profile.create({ data })
-        return createUser
-    }catch(error){
-      throw new Error("Não foi possivel criar o usuário")
-    }
+      const createUser = await this.prisma.profile.create({ data })
+      return createUser
   } 
 }

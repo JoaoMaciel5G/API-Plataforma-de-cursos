@@ -10,7 +10,7 @@ export class GetCoursesUseCase{
             return find
         }catch(error){
             console.log(error)
-            return {errorSystem: "Houve algum erro, tente novamente mais tarde"}
+            throw Error("Houve um erro ao buscar os cursos")
         }
     }
 }

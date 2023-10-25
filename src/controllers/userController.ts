@@ -1,5 +1,5 @@
 import {Request, Response} from "express"
-import jwt, { JwtPayload } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import { Login, UserData } from "../interfaces/interfacesAndTypes.ts"
 import { createUserUseCase } from "../useCases/createUserUseCase.ts"
 import { secretKey } from "../environment_variables.ts"
@@ -13,91 +13,80 @@ export class UserController{
     async create(request: Request, response: Response){
         const { name, email, password }: UserData = request.body
         const createUser = new createUserUseCase()
-        const user = await createUser.execute({email, password, name})
 
-        if ('id' in user) {
-            const token = jwt.sign({ userId: user.id }, secretKey);
-            return response.status(201).json({ message: token });
+        try{
+          const user = await createUser.execute({email, password, name})
+
+          if(user){
+            const token = jwt.sign({ userId: user?.id, email: user.email }, secretKey)
+            return response.status(201).json({ token })
+          }
+        }catch(error){
+            return response.status(401).json({message: error.message})
         }
-
-        return response.status(401).json({message: user.errorSystem})//se houver erros, os returns do usecase e da createUser aparecem
     }
 
     async delete(request: Request, response: Response){
-        const authToken = request.headers.authorization as string
-        const token = authToken && authToken.split(" ")[1]
         const deleteUser = new DeleteUserUseCase()
+        const userId = request.userId
 
         try{
-            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
-            const userId = decodedToken.userId
             const user = await deleteUser.execute(userId)
 
-            if(user?.errorActionForbidden){
-                return response.status(401).json({message: "Ação não autorizada"})
-            }
-            return response.status(200).json({message: "Usuario excluido como sucesso"})
+            return response.status(200).json({message: "Usuario excluido com sucesso"})
         }catch(error){
-            response.status(403).json({message: "Houve algum erro, tente novamente mais tarde"})
+            return response.status(400).json({message: error.message})
         }
     }
 
     async loginUser(request: Request, response: Response){
-        const { email, password }: Login = request.body
+        const {email, password}: Login = request.body
         const loginUseCase = new LoginUserUseCase()
 
         try{
-            const {isErrorEmailOrPassword, sucess} = await loginUseCase.execute({email, password})
-            if(isErrorEmailOrPassword){
-                return response.status(401).json({isErrorEmailOrPassword})
+            const login = await loginUseCase.execute({email, password})
+            
+            if(login?.sucess){
+              return response.status(200).json({message: "Usuário logado com sucesso"})  
             }
-            return response.status(200).json({sucess})
+            return response.status(401).json({error: "Houve algum erro, tente novamente mais tarde"})
         }catch(error){
-            console.log(error)
-            return response.status(403).json({error: "Houve algum erro, tente novamente mais tarde"})
+            return response.status(403).json({error: error.message})
         }
     }
 
     async sendEmail(request: Request, response: Response){
-        const authToken = request.headers.authorization as string
-        const token = authToken && authToken.split(" ")[1]
         const emailUseCase = new SendEmailForgotPasswordUseCase()
-        try{
-            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
-            const userId = decodedToken.userId
+        const email = request.emailUser
 
-            const sendEmail = await emailUseCase.execute(userId)
+        try{
+            const sendEmail = await emailUseCase.execute(email)
             return response.status(200).json({message: "Concluido"})
         }catch(error){
-            console.log(error)
-            return response.status(403).json({error: "Houve algum erro, tente novamente mais tarde"})
+            return response.status(403).json({error: error.message})
         }
     }
 
     async updatePassword(request: Request, response: Response){
         const { password } = request.body
-        const authToken = request.headers.authorization as string
-        const token = authToken && authToken.split(" ")[1]
         const updatePassUseCase = new UpdatePasswordUseCase()
+        const userId = request.userId
 
         try{
-            const decodedToken = jwt.verify(token, secretKey) as JwtPayload
-            const userId = decodedToken.userId
-
             const updatePassword  = updatePassUseCase.execute(userId, password)
 
             return response.status(200).json({message: "Dados atualizados com sucesso"})
         }catch(error){
-            console.log(error)
-            return response.status(403).json({error: "Houve algum erro, tente novamente mais tarde"})
+            return response.status(403).json({error: error.message})
         }
     }
 
     async getCourses(request: Request, response: Response){
-        const getCourses = await new GetCoursesUseCase().execute()
-        if('errorSystem' in getCourses){
-            return response.status(400).json({error: getCourses.errorSystem})
+        try{
+            const getCourses = await new GetCoursesUseCase().execute()
+            return response.status(200).json(getCourses)
+        }catch(error){
+          return response.status(400).json({error: error.message})  
         }
-        return response.status(200).json(getCourses)
     }
 }

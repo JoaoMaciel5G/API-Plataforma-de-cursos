@@ -1,7 +1,7 @@
-const secretKey = process.env.SECRET as string
+const secretKey = process.env.SECRET
 const emailNodeMailer = process.env.EMAIL_NODEMAILER
 const passwdNodeMailer = process.env.PASSWD_NODEMAILER
-const hostNodeMailer = process.env.HOST_NODEMAILER as string
+const hostNodeMailer = process.env.HOST_NODEMAILER
 const port = process.env.PORT_NODEMAILER
  
 
