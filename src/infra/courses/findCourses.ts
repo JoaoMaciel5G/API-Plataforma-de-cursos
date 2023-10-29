@@ -8,13 +8,7 @@ export class FindCourses{
     }
 
     async execute(){
-        const courses = await this.prisma.courses.findMany({
-            select:{
-                images: true,
-                name: true,
-                description: true
-            }
-        })
+        const courses = await this.prisma.courses.findMany()
         return courses
     }
 }

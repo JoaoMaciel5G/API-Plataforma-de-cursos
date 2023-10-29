@@ -7,7 +7,7 @@ import { genSalt, hash } from "bcrypt";
 const createUser = new CreateUser(prisma)
 const { PrismaClientKnownRequestError } = Prisma
 
-export class createUserUseCase{
+export class CreateUserUseCase{
     async execute({email, password, name}: UserData){
         try{
             const salt = await genSalt(12)

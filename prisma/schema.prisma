@@ -13,6 +13,7 @@ model Profile{
   email String @unique
   password String
   createdAt DateTime @default(now())
+  signature Signature[]
 
   @@map("profile")
 }
@@ -22,6 +23,31 @@ model Courses{
   images String
   name String
   description String
+  price Decimal @default(29.90)
+  discount_price Int @default(10)
+  totalValue Decimal @default(39.90)
 
   @@map("courses")
+}
+model PlainSignature{
+  plain_id String @id @default(uuid())
+  plain_name String
+  price Decimal
+  discount_price Int
+  totalValue Decimal
+
+  @@map("plainsignature")
+}
+
+model Signature{
+  plain_id String @id @default(uuid())
+  type_signature String
+  start_date DateTime
+  end_time DateTime
+  status String
+  user_id String
+
+  user Profile @relation(fields: [user_id], references: [id])
+
+  @@map("signature")
 }

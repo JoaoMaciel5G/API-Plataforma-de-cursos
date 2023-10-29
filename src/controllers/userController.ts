@@ -1,7 +1,7 @@
 import {Request, Response} from "express"
 import jwt from "jsonwebtoken"
 import { Login, UserData } from "../interfaces/interfacesAndTypes.ts"
-import { createUserUseCase } from "../useCases/createUserUseCase.ts"
+import { CreateUserUseCase } from "../useCases/createUserUseCase.ts"
 import { secretKey } from "../environment_variables.ts"
 import { DeleteUserUseCase } from "../useCases/deleteUserUseCase.ts"
 import { LoginUserUseCase } from "../useCases/loginUserUseCase.ts"
@@ -12,7 +12,7 @@ import { GetCoursesUseCase } from "../useCases/getCoursesUseCase.ts"
 export class UserController{
     async create(request: Request, response: Response){
         const { name, email, password }: UserData = request.body
-        const createUser = new createUserUseCase()
+        const createUser = new CreateUserUseCase()
 
         try{
           const user = await createUser.execute({email, password, name})
