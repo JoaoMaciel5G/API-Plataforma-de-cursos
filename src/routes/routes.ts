@@ -3,6 +3,7 @@ import { UserController } from "../controllers/userController.ts"
 import { deleteMiddleware } from "../middlewares/deleteMiddleware.ts"
 import { sendEmailMiddleware } from "../middlewares/sendEmailMiddleware.ts"
 import { updatePasswordMiddleware } from "../middlewares/updatePasswordMiddleware.ts"
+import { verifySignatureMiddleware } from "../middlewares/verifySignatureMiddleware.ts"
 
 const router = Router()
 const userController = new UserController()
@@ -27,8 +28,16 @@ router.delete("/delete", deleteMiddleware, (request, response)=>{
     userController.delete(request, response)
 })
 
-router.patch("/updatePassword", updatePasswordMiddleware,  (request, response)=>{
+router.patch("/updatePassword", updatePasswordMiddleware, (request, response)=>{
     userController.updatePassword(request, response)
+})
+
+router.post("/createSignature", (request, response)=>{
+    userController.buySignatureCourse(request, response)
+})
+
+router.post("/verifySignature", verifySignatureMiddleware, (request, response)=>{
+    userController.verifySignature(request, response)
 })
 
 export default router
