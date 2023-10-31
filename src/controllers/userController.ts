@@ -10,6 +10,7 @@ import { UpdatePasswordUseCase } from "../useCases/updatePasswordUseCase.ts"
 import { GetCoursesUseCase } from "../useCases/getCoursesUseCase.ts"
 import { CreateSignatureUseCase } from "../useCases/signatureUseCases/createSignatureUseCase.ts"
 import { VerifySignatureAndUpdateUseCase } from "../useCases/signatureUseCases/verifySignatureAndUpdateUseCase.ts"
+import { GetPlainsUseCase } from "../useCases/signatureUseCases/getPlainsUseCase.ts"
 
 export class UserController{
     async create(request: Request, response: Response){
@@ -127,4 +128,13 @@ export class UserController{
             return response.status(400).json({error: error.message})
         }
     }
+
+    async getPlains(request: Request, response: Response){
+        try{
+            const getPlains = new GetPlainsUseCase ()
+            await getPlains.execute()
+        }catch(error){
+            return response.status(400).json({error: error.message})
+        }
+    }   
 }
