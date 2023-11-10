@@ -22,7 +22,10 @@ export class UserController{
 
           if(user){
             const token = jwt.sign({ userId: user?.id, email: user.email }, secretKey)
-            return response.status(201).json({ token })
+            return response.status(201).json({
+                token,
+                userData: user
+            })
           }
         }catch(error){
             return response.status(401).json({message: error.message})
