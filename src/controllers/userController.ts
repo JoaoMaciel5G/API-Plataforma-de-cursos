@@ -21,7 +21,7 @@ export class UserController{
           const user = await createUser.execute({email, password, name})
 
           if(user){
-            const token = jwt.sign({ userId: user?.id, email: user.email }, secretKey)
+            const token = jwt.sign({ userId: user?.id, email: user.email }, secretKey, {expiresIn: '1d'})
             return response.status(201).json({
                 token,
                 userData: user
