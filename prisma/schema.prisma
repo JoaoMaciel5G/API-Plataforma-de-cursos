@@ -23,6 +23,7 @@ model Courses{
   images String
   name String
   description String
+  price Decimal
 
   @@map("courses")
 }
