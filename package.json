@@ -7,9 +7,9 @@
     "node": "18"
   },
   "scripts": {
-    "start:dev": "nodemon src/server.ts",
+    "start:dev": "tsx watch src/server.ts",
     "build": "tsup src",
-    "star:prod": "node dist/server.cjs"
+    "start:prod": "node dist/server.cjs"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +34,7 @@
     "nodemon": "^3.0.1",
     "prisma": "^5.4.2",
     "ts-node": "^10.9.1",
+    "tsx": "^4.1.3",
     "typescript": "^5.2.2"
   },
   "type": "module"
