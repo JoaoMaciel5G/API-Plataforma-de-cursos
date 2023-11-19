@@ -40,7 +40,11 @@ router.post("/verifySignature", verifySignatureMiddleware, (request, response)=>
     userController.verifySignature(request, response)
 })
 
-router.get("getPlains", (request, response)=>{
+router.get("/getPlains", (request, response)=>{
     userController.getPlains(request, response)
+})
+
+router.get("/getCourses/:id", (request, response)=>{
+    userController.getCoursesById(request, response)
 })
 export default router

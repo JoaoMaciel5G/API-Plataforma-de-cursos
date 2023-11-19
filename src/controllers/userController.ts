@@ -99,6 +99,19 @@ export class UserController{
         }
     }
 
+    async getCoursesById(request: Request, response: Response){
+        const id = request.params.id 
+
+        try{
+            const getCourses = await new GetCoursesUseCase().execute()
+            const courseById = getCourses.filter((item)=> item.id == id)
+
+            return response.status(200).json(courseById)
+        }catch(error){
+          return response.status(400).json({error: error.message})  
+        }
+    }
+
     async buySignatureCourse(request: Request, response: Response){
         const {type_signature, status, user_id} = request.body
         const start_date = new Date()
