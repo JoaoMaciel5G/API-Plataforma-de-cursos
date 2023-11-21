@@ -15,7 +15,7 @@ export class LoginUserUseCase{
                 throw new Error("Usuário ou senha incorreto")
             }
 
-            return {sucess: "Logado com sucesso"}
+            return getInfoUser
         }catch(error){
             throw Error(error.message)
         }

@@ -54,9 +54,12 @@ export class UserController{
 
         try{
             const login = await loginUseCase.execute({email, password})
+            const token = jwt.sign({ userId: login?.id, email: email }, secretKey, {expiresIn: '1d'})
             
-            if(login?.sucess){
-              return response.status(200).json({message: "Usuário logado com sucesso"})  
+            if(login){
+              return response.status(200).json({
+                newToken: token
+              })  
             }
             return response.status(401).json({error: "Houve algum erro, tente novamente mais tarde"})
         }catch(error){
