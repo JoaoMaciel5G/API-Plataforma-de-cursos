@@ -12,12 +12,12 @@ export class LoginUserUseCase{
             const verifyPasswordIsEqual = await compare(password, getInfoUser!.password)
             
             if(!verifyPasswordIsEqual){
-                throw new Error("Usuário ou senha incorreto")
+                throw Error("Usuário ou senha incorretos")
             }
 
             return getInfoUser
         }catch(error){
-            throw Error(error.message)
+            throw Error("Usuário ou senha incorretos")
         }
     }
 }

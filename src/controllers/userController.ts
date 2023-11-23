@@ -57,13 +57,10 @@ export class UserController{
             const token = jwt.sign({ userId: login?.id, email: email }, secretKey, {expiresIn: '1d'})
             
             if(login){
-              return response.status(200).json({
-                newToken: token
-              })  
+              return response.status(200).json({ newToken: token })  
             }
-            return response.status(401).json({error: "Houve algum erro, tente novamente mais tarde"})
         }catch(error){
-            return response.status(403).json({error: error.message})
+            return response.status(401).json({error: error.message})
         }
     }
 

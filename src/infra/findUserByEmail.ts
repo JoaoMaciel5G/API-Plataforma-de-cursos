@@ -8,6 +8,6 @@ export class FindUserByEmail{
     }
     async execute (email: string) {
         const search = await this.prisma.profile.findUniqueOrThrow({ where: { email } })
-        return search
-    } 
+        return search  
+    }
 }
