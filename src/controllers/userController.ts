@@ -48,6 +48,25 @@ export class UserController{
         }
     }
 
+    async verifyToken(request: Request, response: Response){
+        const authToken = request.headers.authorization
+        const token = authToken && authToken.split(" ")[1]
+
+        if(!token){
+            return response.status(401).json({error: "Token não inserido"})
+        }
+    
+        try{
+            const decodedToken = jwt.verify(token, secretKey)
+       
+            return response.status(200).json({message: "Token válido"})
+        }catch(error){
+            if(error.name == "TokenExpiredError"){
+                return response.status(403).json({error: "Token Expirado"})
+            }
+            return response.status(401).json({error: error})
+        }
+    }
     async loginUser(request: Request, response: Response){
         const {email, password}: Login = request.body
         const loginUseCase = new LoginUserUseCase()

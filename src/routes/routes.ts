@@ -47,4 +47,8 @@ router.get("/getPlains", (request, response)=>{
 router.get("/getCourses/:id", (request, response)=>{
     userController.getCoursesById(request, response)
 })
+
+router.post("/verifyExpToken", (request, response)=>{
+    userController.verifyToken(request, response)
+})
 export default router
