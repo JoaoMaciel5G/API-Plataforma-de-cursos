@@ -1,7 +1,6 @@
 import {Router} from "express"
 import { UserController } from "../controllers/userController.ts"
 import { deleteMiddleware } from "../middlewares/deleteMiddleware.ts"
-import { sendEmailMiddleware } from "../middlewares/sendEmailMiddleware.ts"
 import { updatePasswordMiddleware } from "../middlewares/updatePasswordMiddleware.ts"
 import { verifySignatureMiddleware } from "../middlewares/verifySignatureMiddleware.ts"
 
@@ -20,7 +19,7 @@ router.post("/login", (request, response)=>{
     userController.loginUser(request, response)
 })
 
-router.post("/sendMail", sendEmailMiddleware, (request, response)=>{
+router.post("/sendMail", (request, response)=>{
      userController.sendEmail(request, response)
 })
 
