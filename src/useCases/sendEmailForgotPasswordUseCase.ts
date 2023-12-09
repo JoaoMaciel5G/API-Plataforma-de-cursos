@@ -16,20 +16,19 @@ export class SendEmailForgotPasswordUseCase{
                     user: emailNodeMailer,
                     pass: passwdNodeMailer
             }}
-
             const transport = nodemailer.createTransport(configTransport as object)
+
             const find = await findUser.execute(email)
 
             const send = await transport.sendMail({
-                from: `Pro Tech Cursos <${emailNodeMailer}>`,
+                from: `Pro Tech Cursos`,
                 to: find?.email,
                 subject: "Redefinição de senha",
-                html: `<h2>Você solicitou uma redefinição de senha?</h2><p>Para redefinir sua senha, entre no link a seguir <a href="google.com">Redefinir senha</a></p><p>Se você não solicitou esta ação, ignore este email.</p>`
+                html: `<h2>Você solicitou uma redefinição de senha?</h2></br><h3>Para redefinir sua senha, entre no link a seguir <a href="google.com">Redefinir senha</a></h3></br><h3>Se você não solicitou esta ação, ignore este email.</h3>`
             })
             return {sucess: "Email enviado"}
         }catch(error){
-            console.log(error);
-            throw Error("Houve um erro ao enviar o email")
+            throw Error(error.message)
         }
         
     }
