@@ -29,9 +29,9 @@ export class UserController{
           }
         }catch(error){
             if(error.cause == "email"){
-                return response.status(409).json({message: error.message})
+                return response.status(409).json({error: error.message})
             }
-            return response.status(500).json({message: error.message})
+            return response.status(500).json({error: error.message})
         }
     }
 
@@ -44,7 +44,7 @@ export class UserController{
 
             return response.status(200).json({message: "Usuario excluido com sucesso"})
         }catch(error){
-            return response.status(403).json({message: error.message})
+            return response.status(403).json({error: error.message})
         }
     }
 
