@@ -85,7 +85,7 @@ export class UserController{
 
     async sendEmail(request: Request, response: Response){
         const emailUseCase = new SendEmailForgotPasswordUseCase()
-        const email = request.emailUser
+        const {email} = request.body
 
         try{
             const sendEmail = await emailUseCase.execute(email)
