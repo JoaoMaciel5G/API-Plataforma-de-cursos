@@ -11,6 +11,8 @@ import { GetCoursesUseCase } from "../useCases/getCoursesUseCase.ts"
 import { CreateSignatureUseCase } from "../useCases/signatureUseCases/createSignatureUseCase.ts"
 import { VerifySignatureAndUpdateUseCase } from "../useCases/signatureUseCases/verifySignatureAndUpdateUseCase.ts"
 import { GetPlainsUseCase } from "../useCases/signatureUseCases/getPlainsUseCase.ts"
+import { FindUserByEmail } from "../infra/findUserByEmail.ts"
+import prisma from "../../prisma/prismaClient.ts"
 
 export class UserController{
     async create(request: Request, response: Response){
@@ -84,13 +86,24 @@ export class UserController{
     }
 
     async sendEmail(request: Request, response: Response){
-        const emailUseCase = new SendEmailForgotPasswordUseCase()
         const { email } = request.body
+        const emailUseCase = new SendEmailForgotPasswordUseCase()
+        const url = request.headers.url
 
         try{
-            const sendEmail = await emailUseCase.execute(email)
-            return response.status(200).json({message: "Concluido"})
+            const findUserByEmail = await new FindUserByEmail(prisma).execute(email)
+
+            const id = findUserByEmail.id
+            
+            const token = jwt.sign({userId: id}, secretKey, {expiresIn: '1d'})
+
+            const sendEmail = await emailUseCase.execute(email, url, token)
+
+            return response.status(200).json({message: email})
         }catch(error){
+            if(error.message == "No Profile found"){
+                return response.status(403).json({error: "Email não encontrado"})
+            }
             return response.status(403).json({error: error.message})
         }
     }

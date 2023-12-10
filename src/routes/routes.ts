@@ -20,7 +20,7 @@ router.post("/login", (request, response)=>{
 })
 
 router.post("/sendMail", (request, response)=>{
-     userController.sendEmail(request, response)
+    userController.sendEmail(request, response)
 })
 
 router.delete("/delete", deleteMiddleware, (request, response)=>{

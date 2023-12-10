@@ -6,7 +6,7 @@ import { FindUserByEmail } from "../infra/findUserByEmail.ts"
 const findUser = new FindUserByEmail(prisma)
 
 export class SendEmailForgotPasswordUseCase{
-    async execute(email: string) {
+    async execute(email: string, url: string, token: string) {
         try{
             const configTransport= {
                 host: hostNodeMailer,
@@ -24,12 +24,10 @@ export class SendEmailForgotPasswordUseCase{
                 from: `Pro Tech Cursos`,
                 to: find?.email,
                 subject: "Redefinição de senha",
-                html: `<h2>Você solicitou uma redefinição de senha?</h2></br><h3>Para redefinir sua senha, entre no link a seguir <a href="google.com">Redefinir senha</a></h3></br><h3>Se você não solicitou esta ação, ignore este email.</h3>`
+                html: `<h2>Você solicitou uma redefinição de senha?</h2></br><h3>Para redefinir sua senha, entre no link a seguir para <a href="${url}/change-password?token=${token}">Redefinir senha</a></h3></br><h3>Se você não solicitou esta ação, ignore este email.</h3>`
             })
-            return {sucess: "Email enviado"}
         }catch(error){
             throw Error(error.message)
         }
-        
     }
 }
