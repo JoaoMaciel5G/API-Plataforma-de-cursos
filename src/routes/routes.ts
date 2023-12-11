@@ -1,7 +1,6 @@
 import {Router} from "express"
 import { UserController } from "../controllers/userController.ts"
 import { deleteMiddleware } from "../middlewares/deleteMiddleware.ts"
-import { updatePasswordMiddleware } from "../middlewares/updatePasswordMiddleware.ts"
 import { verifySignatureMiddleware } from "../middlewares/verifySignatureMiddleware.ts"
 
 const router = Router()
@@ -27,7 +26,7 @@ router.delete("/delete", deleteMiddleware, (request, response)=>{
     userController.delete(request, response)
 })
 
-router.patch("/updatePassword", updatePasswordMiddleware, (request, response)=>{
+router.patch("/updatePassword", (request, response)=>{
     userController.updatePassword(request, response)
 })
 

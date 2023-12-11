@@ -6,14 +6,14 @@ export class UpdatePassword{
     constructor(prisma: PrismaClient){
         this.prisma = prisma
     }
-    async execute(userId: string, password: string){
+    async execute(id: string, password: string){
         const updatePassword = await this.prisma.profile.update({
             where: {
-                id: userId
+                id
             },
             data: {
                 password
-             }
+            }
         })
         return updatePassword
     }

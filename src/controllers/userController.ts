@@ -61,7 +61,7 @@ export class UserController{
         try{
             const decodedToken = jwt.verify(token, secretKey)
        
-            return response.status(200).json({message: "Token válido"})
+            return response.status(200).json({message: decodedToken.userId})
         }catch(error){
             if(error.name == "TokenExpiredError"){
                 return response.status(403).json({error: "Token Expirado"})
@@ -109,12 +109,11 @@ export class UserController{
     }
 
     async updatePassword(request: Request, response: Response){
-        const { password } = request.body
+        const { password, id} = request.body
         const updatePassUseCase = new UpdatePasswordUseCase()
-        const userId = request.userId
 
         try{
-            const updatePassword  = updatePassUseCase.execute(userId, password)
+            const updatePassword  = updatePassUseCase.execute(id, password)
 
             return response.status(200).json({message: "Dados atualizados com sucesso"})
         }catch(error){

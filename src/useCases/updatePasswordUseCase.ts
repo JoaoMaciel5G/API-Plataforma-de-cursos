@@ -5,12 +5,12 @@ import prisma from "../../prisma/prismaClient.ts";
 const findUser = new UpdatePassword(prisma)
 
 export class UpdatePasswordUseCase{
-    async execute(userId: string, password: string) {
+    async execute(id: string, password: string) {
         try{
             const salt = await genSalt(12)
             const passwordHash = await hash(password, salt)
 
-            const changePass = await findUser.execute(userId, passwordHash)
+            const changePass = await findUser.execute(id, passwordHash)
         }catch(error){
             throw Error(error.message)
         }
