@@ -21,7 +21,7 @@ export class SendEmailForgotPasswordUseCase{
             const find = await findUser.execute(email)
 
             const send = await transport.sendMail({
-                from: `Pro Tech Cursos`,
+                from: `Pro Tech Cursos ${emailNodeMailer}`,
                 to: find?.email,
                 subject: "Redefinição de senha",
                 html: `<h2>Você solicitou uma redefinição de senha?</h2></br><h3>Para redefinir sua senha, entre no link a seguir para <a href="${url}/change-password?token=${token}">Redefinir senha</a></h3></br><h3>Se você não solicitou esta ação, ignore este email.</h3>`
