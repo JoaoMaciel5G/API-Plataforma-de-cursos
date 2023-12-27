@@ -10,8 +10,7 @@ export class SendEmailForgotPasswordUseCase{
         try{
             const configTransport = {
                 host: hostNodeMailer,
-                port: serviceNodeMailer,
-                secure: secureNodeMailer,
+                port: 587,
                 auth: {
                     user: emailNodeMailer,
                     pass: passwdNodeMailer
