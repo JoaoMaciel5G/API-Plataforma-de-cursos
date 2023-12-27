@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer"
-import { passwdNodeMailer, emailNodeMailer, serviceNodeMailer, hostNodeMailer } from "../environment_variables.ts"
+import { passwdNodeMailer, emailNodeMailer, serviceNodeMailer, hostNodeMailer, secureNodeMailer } from "../environment_variables.ts"
 import prisma from "../../prisma/prismaClient.ts"
 import { FindUserByEmail } from "../infra/findUserByEmail.ts"
 
@@ -10,13 +10,14 @@ export class SendEmailForgotPasswordUseCase{
         try{
             const configTransport = {
                 host: hostNodeMailer,
-                service: serviceNodeMailer,
-                secure: true,
+                port: serviceNodeMailer,
+                secure: secureNodeMailer,
                 auth: {
                     user: emailNodeMailer,
                     pass: passwdNodeMailer
-            }}
-            const transport = nodemailer.createTransport(configTransport as object)
+                },
+            }
+            const transport = nodemailer.createTransport(configTransport)
 
             const find = await findUser.execute(email)
 

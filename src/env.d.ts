@@ -8,6 +8,7 @@ declare global {
         HOST_NODEMAILER: string,
         PASSWD_NODEMAILER: string,
         EMAIL_NODEMAILER: string,
+        SECURE_NODEMAILER: boolean
         DATABASE_URL: string
     }
   }
