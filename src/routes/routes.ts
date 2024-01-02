@@ -6,47 +6,26 @@ import { verifySignatureMiddleware } from "../middlewares/verifySignatureMiddlew
 const router = Router()
 const userController = new UserController()
 
-router.get("/getCourses", (request, response)=>{
-    userController.getCourses(request, response)
-})
+router.get("/getCourses", userController.getCourses)
 
-router.post("/create", (request, response)=>{
-    userController.create(request, response)
-})
+router.post("/create", userController.create)
 
-router.post("/login", (request, response)=>{
-    userController.loginUser(request, response)
-})
+router.post("/login", userController.loginUser)
 
-router.post("/sendMail", (request, response)=>{
-    userController.sendEmail(request, response)
-})
+router.post("/sendMail", userController.sendEmail)
 
-router.delete("/delete", deleteMiddleware, (request, response)=>{
-    userController.delete(request, response)
-})
+router.delete("/delete", deleteMiddleware, userController.delete)
 
-router.patch("/updatePassword", (request, response)=>{
-    userController.updatePassword(request, response)
-})
+router.patch("/updatePassword", userController.updatePassword)
 
-router.post("/createSignature", (request, response)=>{
-    userController.buySignatureCourse(request, response)
-})
+router.post("/createSignature", userController.buySignatureCourse)
 
-router.post("/verifySignature", verifySignatureMiddleware, (request, response)=>{
-    userController.verifySignature(request, response)
-})
+router.post("/verifySignature", verifySignatureMiddleware, userController.verifySignature)
 
-router.get("/getPlains", (request, response)=>{
-    userController.getPlains(request, response)
-})
+router.get("/getPlains", userController.getPlains)
 
-router.get("/getCourses/:id", (request, response)=>{
-    userController.getCoursesById(request, response)
-})
+router.get("/getCourses/:id", userController.getCoursesById)
 
-router.post("/verifyExpToken", (request, response)=>{
-    userController.verifyToken(request, response)
-})
+router.post("/verifyExpToken", userController.verifyToken)
+
 export default router
