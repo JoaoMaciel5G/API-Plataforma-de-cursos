@@ -181,8 +181,8 @@ export class UserController{
 
     async getPlains(request: Request, response: Response){
         try{
-            const getPlains = new GetPlainsUseCase ()
-            await getPlains.execute()
+            const getPlains = await new GetPlainsUseCase().execute()
+            return response.status(200).json(getPlains)
         }catch(error){
             return response.status(400).json({error: error.message})
         }
